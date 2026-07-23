@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion des Interventions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <script>
+        if (!sessionStorage.getItem('utilisateur')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <div class="app-layout">
+
+        <!-- ===== Menu latéral ===== -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">🛠️ OCP</div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-link active" data-page="dashboard">📊 Tableau de bord</a>
+                <a href="#" class="nav-link" data-page="interventions">🔧 Interventions</a>
+                <a href="#" class="nav-link" data-page="techniciens">👷 Techniciens</a>
+                <a href="#" class="nav-link" data-page="clients">🧑‍💼 Clients</a>
+                <a href="#" class="nav-link" data-page="pieces">📦 Pièces</a>
+                <a href="rapports.html" class="nav-link">📋 Rapports</a>
+            </nav>
+            <div class="sidebar-footer">
+                Connecté : <strong id="nomUtilisateurConnecte"></strong><br>
+                <a href="#" onclick="seDeconnecter()">🚪 Déconnexion</a>
+            </div>
+        </aside>
+
+        <!-- ===== Contenu principal ===== -->
+        <main class="main-content">
+
+            <!-- PAGE : Tableau de bord -->
+            <section class="page active" id="page-dashboard">
+                <h1>Tableau de bord</h1>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="statTotal">0</div>
+                        <div class="stat-label">Interventions totales</div>
+                    </div>
+                    <div class="stat-card stat-cours">
+                        <div class="stat-value" id="statEnCours">0</div>
+                        <div class="stat-label">En cours</div>
+                    </div>
+                    <div class="stat-card stat-terminee">
+                        <div class="stat-value" id="statTerminee">0</div>
+                        <div class="stat-label">Terminées</div>
+                    </div>
+                    <div class="stat-card stat-attente">
+                        <div class="stat-value" id="statAttente">0</div>
+                        <div class="stat-label">En attente</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE : Interventions -->
+            <section class="page" id="page-interventions">
+                <h1>Interventions</h1>
+
+                <div class="form-container">
+                    <h2>Nouvelle intervention</h2>
+                    <input type="text" id="titre" placeholder="Titre de l'intervention">
+                    <textarea id="description" placeholder="Description"></textarea>
+                    <select id="intervention_technicien">
+                        <option value="">-- Aucun technicien assigné --</option>
+                    </select>
+                    <input type="date" id="date_planifiee">
+                    <button onclick="ajouterIntervention()">Ajouter</button>
+                </div>
+
+                <div class="table-container">
+                    <h2>Liste des interventions</h2>
+                    <table id="tableInterventions">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Titre</th><th>Description</th><th>Technicien</th>
+                                <th>Statut</th><th>Date planifiée</th><th>Notes</th><th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- PAGE : Techniciens -->
+            <section class="page" id="page-techniciens">
+                <h1>Techniciens</h1>
+
+                <div class="form-container">
+                    <h2>Nouveau technicien</h2>
+                    <input type="text" id="tech_nom" placeholder="Nom">
+                    <input type="text" id="tech_prenom" placeholder="Prénom">
+                    <input type="text" id="tech_competence" placeholder="Compétence ">
+                    <label>
+                        <input type="checkbox" id="tech_disponible" checked>
+                        Disponible
+                    </label>
+                    <button onclick="ajouterTechnicien()">Ajouter le technicien</button>
+                </div>
+
+                <div class="table-container">
+                    <h2>Liste des techniciens</h2>
+                    <table id="tableTechniciens">
+                        <thead>
+                            <tr><th>ID</th><th>Nom</th><th>Prénom</th><th>Compétence</th><th>Disponible</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- PAGE : Clients -->
+            <section class="page" id="page-clients">
+                <h1>Clients</h1>
+
+                <div class="form-container">
+                    <h2>Nouveau client</h2>
+                    <input type="text" id="client_nom" placeholder="Nom du client">
+                    <input type="text" id="client_telephone" placeholder="Téléphone">
+                    <input type="text" id="client_adresse" placeholder="Adresse">
+                    <button onclick="ajouterClient()">Ajouter le client</button>
+                </div>
+
+                <div class="table-container">
+                    <h2>Liste des clients</h2>
+                    <table id="tableClients">
+                        <thead>
+                            <tr><th>ID</th><th>Nom</th><th>Téléphone</th><th>Adresse</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- PAGE : Pièces -->
+            <section class="page" id="page-pieces">
+                <h1>Pièces</h1>
+
+                <div class="form-container">
+                    <h2>Nouvelle pièce</h2>
+                    <input type="text" id="piece_nom" placeholder="Nom de la pièce">
+                    <input type="text" id="piece_stock" placeholder="Quantité en stock">
+                    <button onclick="ajouterPiece()">Ajouter la pièce</button>
+                </div>
+
+                <div class="table-container">
+                    <h2>Liste des pièces</h2>
+                    <table id="tablePieces">
+                        <thead>
+                            <tr><th>ID</th><th>Nom</th><th>Stock</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Navigation entre les pages (menu latéral)
+        document.querySelectorAll('.nav-link[data-page]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById('page-' + pageId).classList.add('active');
+
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+
+                if (pageId === 'dashboard') calculerStatistiques();
+            });
+        });
+
+        // Calcule les statistiques du tableau de bord
+        function calculerStatistiques() {
+            fetch(API_URL)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('statTotal').textContent = data.length;
+                    document.getElementById('statEnCours').textContent = data.filter(i => i.statut === 'En cours').length;
+                    document.getElementById('statTerminee').textContent = data.filter(i => i.statut === 'Terminée').length;
+                    document.getElementById('statAttente').textContent = data.filter(i => i.statut === 'En attente').length;
+                })
+                .catch(err => console.error('Erreur:', err));
+        }
+
+        document.addEventListener('DOMContentLoaded', calculerStatistiques);
+    </script>
+</body>
+</html>

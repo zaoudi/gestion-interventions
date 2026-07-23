@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion - Gestion des Interventions</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="form-container" style="max-width: 400px; margin-top: 100px;">
+        <h2>🔐 Connexion</h2>
+        <input type="text" id="nom_utilisateur" placeholder="Nom d'utilisateur">
+        <input type="password" id="mot_de_passe" placeholder="Mot de passe">
+        <button onclick="seConnecter()">Se connecter</button>
+        <p id="messageErreur" style="color: #ff8a75; margin-top: 12px; text-align: center;"></p>
+        <hr style="margin: 20px 0; border: none; border-top: 1px solid rgba(0,0,0,0.1);">
+        <button onclick="connexionRapide()" style="background: #c17f3e;">⚡ Connexion rapide (démo)</button>
+    </div>
+
+    <script>
+        function seConnecter() {
+            const nom_utilisateur = document.getElementById('nom_utilisateur').value;
+            const mot_de_passe = document.getElementById('mot_de_passe').value;
+            const messageErreur = document.getElementById('messageErreur');
+
+           fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nom_utilisateur, mot_de_passe })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Identifiants incorrects');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Connecté:', data);
+                // On sauvegarde l'utilisateur connecté pour cette session
+                sessionStorage.setItem('utilisateur', JSON.stringify(data.user));
+                // Redirection vers la page principale
+                window.location.href = 'index.html';
+            })
+            .catch(err => {
+                messageErreur.textContent = '❌ Nom d\'utilisateur ou mot de passe incorrect';
+            });
+        }
+        // Connexion rapide pour les tests (remplit et connecte automatiquement)
+        function connexionRapide() {
+            document.getElementById('nom_utilisateur').value = 'admin';
+            document.getElementById('mot_de_passe').value = 'admin123';
+            seConnecter();
+        }
+
+        // Permet d'appuyer sur "Entrée" pour se connecter
+        document.getElementById('mot_de_passe').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') seConnecter();
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapports - Gestion des Interventions</title>
+
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .rapport-card {
+            background: rgba(255,255,255,0.95);
+            color: #1a2b2f;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .rapport-card h3 {
+            margin: 0 0 10px;
+            color: #0e5c4a;
+        }
+        .rapport-ligne {
+            margin: 6px 0;
+            font-size: 0.9rem;
+        }
+        .rapport-label {
+            font-weight: 600;
+            color: #5a6b7d;
+        }
+        .btn-retour {
+            display: inline-block;
+            margin-bottom: 16px;
+            color: #3fae7c;
+            text-decoration: none;
+        }
+        @media print {
+            .btn-retour, #btnImprimer, h1, h1::after { display: none !important; }
+            body { background: white !important; padding: 0 !important; }
+            .table-container { box-shadow: none !important; background: white !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📋 Rapports des Interventions</h1>
+
+    <div class="table-container">
+        <a href="index.html" class="btn-retour">← Retour à l'application</a>
+        <button id="btnImprimer" onclick="window.print()">🖨️ Imprimer / Exporter en PDF</button>
+        <div id="listeRapports" style="margin-top: 20px;"></div>
+    </div>
+
+    <script>
+        const API_URL = '/api/interventions';
+
+        fetch(API_URL)
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('listeRapports');
+                container.innerHTML = '';
+
+                data.forEach(intervention => {
+                    const nomTech = intervention.tech_nom 
+                        ? `${intervention.tech_prenom} ${intervention.tech_nom}` 
+                        : 'Non assigné';
+
+                    const carte = `
+                        <div class="rapport-card">
+                            <h3>Intervention #${intervention.id} — ${intervention.titre}</h3>
+                            <div class="rapport-ligne"><span class="rapport-label">Description :</span> ${intervention.description || '-'}</div>
+                            <div class="rapport-ligne"><span class="rapport-label">Technicien assigné :</span> ${nomTech}</div>
+                            <div class="rapport-ligne"><span class="rapport-label">Statut :</span> ${intervention.statut}</div>
+                            <div class="rapport-ligne"><span class="rapport-label">Date planifiée :</span> ${intervention.date_planifiee || '-'}</div>
+                            <div class="rapport-ligne"><span class="rapport-label">Observations du technicien :</span> ${intervention.notes || 'Aucune observation'}</div>
+                        </div>
+                    `;
+                    container.innerHTML += carte;
+                });
+            })
+            .catch(err => console.error('Erreur:', err));
+    </script>
+
+</body>
+</html>
