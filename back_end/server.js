@@ -17,10 +17,13 @@ app.use('/api/auth', authRoutes);
 app.use('/api/clients', clientsRoutes);
 app.use('/api/pieces', piecesRoutes);
 
-// Sert les fichiers du frontend (HTML, CSS, JS, images)
 app.use(express.static(path.join(__dirname, '..', 'front_end')));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`🚀 Serveur démarré sur le port ${PORT}`);
-});
+if (require.main === module) {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`🚀 Serveur démarré sur le port ${PORT}`);
+    });
+}
+
+module.exports = app;
