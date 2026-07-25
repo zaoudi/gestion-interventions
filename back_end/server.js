@@ -17,7 +17,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/clients', clientsRoutes);
 app.use('/api/pieces', piecesRoutes);
 
-app.use(express.static(path.join(__dirname, '..', 'front_end')));
+app.use(express.static(path.join(process.cwd(), 'front_end')));
 
 if (require.main === module) {
     const PORT = process.env.PORT || 3000;
