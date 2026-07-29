@@ -1,7 +1,7 @@
-const API_URL = 'http://localhost:3000/api/interventions';
-const API_TECHNICIENS_URL = 'http://localhost:3000/api/techniciens';
-const API_CLIENTS_URL = 'http://localhost:3000/api/clients';
-const API_PIECES_URL = 'http://localhost:3000/api/pieces';
+const API_URL = '/api/interventions';
+const API_TECHNICIENS_URL = '/api/techniciens';
+const API_CLIENTS_URL = '/api/clients';
+const API_PIECES_URL = '/api/pieces';
 
 
 // Charger les interventions au démarrage de la page
