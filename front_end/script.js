@@ -1,4 +1,8 @@
-const API_URL = '/api/interventions';
+const API_URL = 'http://localhost:3000/api/interventions';
+const API_TECHNICIENS_URL = 'http://localhost:3000/api/techniciens';
+const API_CLIENTS_URL = 'http://localhost:3000/api/clients';
+const API_PIECES_URL = 'http://localhost:3000/api/pieces';
+
 
 // Charger les interventions au démarrage de la page
 document.addEventListener('DOMContentLoaded', chargerInterventions);
@@ -140,7 +144,6 @@ function ajouterIntervention() {
 }
 // ==================== TECHNICIENS ====================
 
-const API_TECHNICIENS_URL = '/api/techniciens';
 
 // Charger les techniciens au démarrage
 document.addEventListener('DOMContentLoaded', chargerTechniciens);
@@ -227,7 +230,7 @@ function seDeconnecter() {
 }
 // ==================== CLIENTS ====================
 
-const API_CLIENTS_URL = '/api/clients';
+
 
 document.addEventListener('DOMContentLoaded', chargerClients);
 
@@ -283,7 +286,7 @@ function supprimerClient(id) {
 
 // ==================== PIECES ====================
 
-const API_PIECES_URL = '/api/pieces';
+
 
 document.addEventListener('DOMContentLoaded', chargerPieces);
 

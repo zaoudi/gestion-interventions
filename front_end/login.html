@@ -24,7 +24,7 @@
             const mot_de_passe = document.getElementById('mot_de_passe').value;
             const messageErreur = document.getElementById('messageErreur');
 
-           fetch('/api/auth/login', {
+           fetch('http://localhost:3000/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nom_utilisateur, mot_de_passe })
